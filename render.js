@@ -22,13 +22,11 @@ renderer.render(scene, camera)
 
 const loader = new GLTFLoader();
 loader.load('Model1.glb', function(gltf) {
-    console.log(gltf)
     for (let i = 0; i < 5; i ++) {
         gltf.scene.children.forEach(function(mesh, index, array) {
             scene.add(mesh)
         })
     }
-    console.log(scene.children)
 }, undefined, function (error) {
     console.error(error)
 })
@@ -36,12 +34,23 @@ loader.load('Model1.glb', function(gltf) {
 const ambientlight = new THREE.AmbientLight(0xffffff);
 scene.add(ambientlight)
 
-console.log(scene.children)
+const pointlight = new THREE.PointLight(0xffffff);
+scene.add(pointlight)
+
+function rad(degrees) {
+    return degrees * (Math.PI / 180);
+}
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
+let deg = 0;
+
 function animate() {
     requestAnimationFrame(animate);
+
+    pointlight.position.set(Math.sin(rad(deg)) * 20, 0, Math.cos(rad(deg)) * 20);
+
+    deg ++;
 
     controls.update();
     renderer.render(scene, camera);
